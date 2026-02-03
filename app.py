@@ -12,12 +12,11 @@ def index():
 def fetch_video():
     url = request.form.get('url')
             ydl_opts = {
-            'format': 'best',
-            'quiet': True,
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'referer': 'https://www.google.com/',
+    'format': 'best',
+    'quiet': True,
+    'username': 'oauth2',
+    'password': '',
             }
-
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             return jsonify({
