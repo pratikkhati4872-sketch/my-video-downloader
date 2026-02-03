@@ -1,30 +1,28 @@
-from flask import Flask, render_template, request, jsonify
-import yt_dlp
-import os
+from flask import Flask, render_template, jsonify
+import requests
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
     return render_template('index.html')
-    
-@app.route('/fetch', methods=['POST'])
-def fetch_video():
-    url = request.form.get('url')
-    ydl_opts = {
-        'format': 'best',
-        'quiet': True,
-        'username': 'oauth2',
-        'password': '',
-    }
+
+@app.route('/get_quote')
+def get_quote():
     try:
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
-            return jsonify({
-                'success': True,
-                'title': info.get('title'),
-                'download_url': info.get('url')
-            })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-        
+        # Using a reliable, free quote API
+        response = requests.get("https://api.quotable.io/random", verify=False)
+        data = response.json()
+        return jsonify({
+            'quote': data['content'],
+            'author': data['author']
+        })
+    except:
+        return jsonify({
+            'quote': "The best way to predict the future is to create it.",
+            'author': "Peter Drucker"
+        })
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+    
