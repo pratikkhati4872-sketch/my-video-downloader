@@ -7,16 +7,17 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return render_template('index.html')
-
+    
 @app.route('/fetch', methods=['POST'])
 def fetch_video():
     url = request.form.get('url')
-            ydl_opts = {
-    'format': 'best',
-    'quiet': True,
-    'username': 'oauth2',
-    'password': '',
-            }
+    ydl_opts = {
+        'format': 'best',
+        'quiet': True,
+        'username': 'oauth2',
+        'password': '',
+    }
+    try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             return jsonify({
@@ -26,6 +27,4 @@ def fetch_video():
             })
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+        
