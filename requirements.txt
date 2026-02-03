@@ -1,4 +1,4 @@
-flask
+Flask
 yt-dlp
-gunicorn
 yt-dlp-youtube-oauth2
+
